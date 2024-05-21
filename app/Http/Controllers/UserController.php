@@ -46,11 +46,6 @@ class UserController extends Controller
      */
     public function update(User $user, UpdateUserRequest $request)
     {   
-        // $data = $request->validate([
-        //     'name' => 'required',
-        //     'email' => 'required|email|unique:users,email,'.$user->id
-        // ]);
-
         if(!$user) {
             return response(['message' => 'No User Found!'], 500);
         } else {
@@ -65,7 +60,7 @@ class UserController extends Controller
         if($service->changeStatus($user->id)){
             return response(200);
         }
-        return response(200);
+        return response(500);
     }
 
 
@@ -74,7 +69,6 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-
         if (!$user) {
             return response(['message' => 'No User Found!'], 500);
         } else {
