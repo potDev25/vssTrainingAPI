@@ -24,7 +24,7 @@ class UserController extends Controller
     {
         $saveUser = User::create($request->validated());
 
-        if($saveUser){
+        if ($saveUser) {
             return response(['message' => 'user added successfully'], 200);
         }
         return response(['message' => 'server error'], 500);
@@ -35,7 +35,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        if(!$user){
+        if (!$user) {
             return response(['message' => 'No User Found!'], 500);
         }
         return response($user);
@@ -44,10 +44,22 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, User $user)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
+        ]);
+
+        
+        if(!$user) {
+            return response(['message' => 'No User Found!'], 500);
+        } else {
+            $user->update($validated);
+        }
+
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -55,11 +67,10 @@ class UserController extends Controller
     public function destroy(User $user)
     {
 
-        if(!$user){
+        if (!$user) {
             return response(['message' => 'No User Found!'], 500);
-        }else{
+        } else {
             $user->delete();
         }
-
     }
 }
