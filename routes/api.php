@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,4 +24,7 @@ Route::controller(UserController::class)->group(function(){
     Route::post('/users/store', 'store');
     Route::delete('/users/destroy/{user}', 'destroy');
     Route::post('/users/update/{user}', 'update');
+
+    //change user status api route
+    Route::post('/users/change-status/{user}', 'updateStatus');
 });
