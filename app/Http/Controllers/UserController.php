@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateUserRequest;
 use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -11,9 +12,9 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::all();
+        $users = User::paginate($request->limit);
         return response($users);
     }
 
@@ -33,31 +34,29 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(User $user)
+    public function show(string $id)
     {
-        if (!$user) {
-            return response(['message' => 'No User Found!'], 500);
-        }
+        $user = User::select('name', 'email')->where('id', $id)->first();
         return response($user);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user)
-    {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email',
+    public function update(User $user, Request $request)
+    {   
+        $data = $request->validate([
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email,'.$user->id
         ]);
-
         
         if(!$user) {
             return response(['message' => 'No User Found!'], 500);
         } else {
-            $user->update($validated);
+            $user->update($data);
         }
 
+        return response(200);
     }
 
 
