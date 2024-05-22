@@ -16,7 +16,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $users = User::paginate($request->limit);
+        $users = User::where('id', '!=', auth()->user()->id)->paginate($request->limit);
         return response($users);
     }
 
@@ -74,5 +74,16 @@ class UserController extends Controller
         } else {
             $user->delete();
         }
+    }
+
+    public function logout(Request $request){
+        $user = $request->user();
+
+        /** @var User $user **/
+        $user->currentAccessToken()->delete();
+
+        return response([
+            "user" => $user
+        ], 200);
     }
 }

@@ -24,10 +24,11 @@ Route::middleware('auth:sanctum')->group(function() {
     
         //change user status api route
         Route::post('/users/change-status/{user}', 'updateStatus');
+        Route::post('/users/logout', 'logout');
     });
 });
 
 
 Route::controller(App\Http\Controllers\AuthenticationController::class)->group(function(){
-    Route::post('/login', 'login');
+    Route::post('/login', 'login')->name('login');
 });

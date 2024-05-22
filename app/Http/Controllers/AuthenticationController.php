@@ -3,22 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
+use App\Services\AuthServices;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AuthenticationController extends Controller
 {
-    public function login(LoginRequest $request){
+    public function login(LoginRequest $request, AuthServices $service){
         $credentials = $request->validated();
-
-        if(!Auth::attempt($credentials)){
-            return response([
-                'message_error' => 'Invalid Credentials'
-            ], 422);
+        
+        if($service->loginUser($credentials) === 500){
+            return response(['message_error' => 'Account Blocked!'], 422);
+        }elseif($service->loginUser($credentials) === 422){
+            return response(['message_error' => 'Invalid Credentials!'], 422);
         }
-
-        // $user->status = 1;
-        // $user->update();
 
        /** @var User $user **/
         $user = Auth::user();
