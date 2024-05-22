@@ -26,6 +26,21 @@ class UserController extends Controller
     {
         $saveUser = User::create($request->validated());
 
+        //vadlidate the uploaded file
+        $data = $request->validate([
+            'image' => 'required|image|mimes:jpeg,jpg,png|max:2048',
+        ]);
+
+        // Get the file extension
+        $extention = $request->file('image')->getClientOriginalExtension();
+
+        // Get the mines type
+        $minesType = $request->file('image')->getMimeType();
+
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('media', 'public');
+        }
+
         if ($saveUser) {
             return response(['message' => 'user added successfully'], 200);
         }
@@ -45,8 +60,8 @@ class UserController extends Controller
      * Update the specified resource in storage.
      */
     public function update(User $user, UpdateUserRequest $request)
-    {   
-        if(!$user) {
+    {
+        if (!$user) {
             return response(['message' => 'No User Found!'], 500);
         } else {
             $user->update($request->validated());
@@ -56,8 +71,9 @@ class UserController extends Controller
     }
 
     //update user status
-    public function updateStatus(User $user, UserServices $service){
-        if($service->changeStatus($user->id)){
+    public function updateStatus(User $user, UserServices $service)
+    {
+        if ($service->changeStatus($user->id)) {
             return response(200);
         }
         return response(500);
