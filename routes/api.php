@@ -17,13 +17,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:sanctum')->group(function() {
+
 });
 
 Route::controller(UserController::class)->group(function(){
     Route::get('/users', 'index');
-    Route::get('/users/{user}', 'show');
+    Route::get('/users/{id}', 'show');
     Route::post('/users/store', 'store');
     Route::delete('/users/destroy/{user}', 'destroy');
     Route::post('/users/update/{user}', 'update');
