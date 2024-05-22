@@ -7,6 +7,7 @@ use App\Http\Requests\UserRequest;
 use App\Models\User;
 use App\Services\UserServices;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -22,26 +23,9 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(UserRequest $request)
+    public function store(UserRequest $request, UserServices $service)
     {
-        $saveUser = User::create($request->validated());
-
-        //vadlidate the uploaded file
-        $data = $request->validate([
-            'image' => 'required|image|mimes:jpeg,jpg,png|max:2048',
-        ]);
-
-        // Get the file extension
-        $extention = $request->file('image')->getClientOriginalExtension();
-
-        // Get the mines type
-        $minesType = $request->file('image')->getMimeType();
-
-        if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('media', 'public');
-        }
-
-        if ($saveUser) {
+        if ($service->storeUser($request)) {
             return response(['message' => 'user added successfully'], 200);
         }
         return response(['message' => 'server error'], 500);

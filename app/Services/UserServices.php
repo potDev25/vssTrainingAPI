@@ -7,7 +7,7 @@
     class UserServices {
 
         //change user status
-        public function changeStatus(string $id) {
+        public function changeStatus(string $id) : bool {
             $user = User::where('id', $id)->first();
 
             if($user){
@@ -23,8 +23,18 @@
             return false;
         }
 
-        public function uploadImage($file) {
-            
+        public function storeUser($request) : bool {
+            $data = $request->validated();
+            if ($request->hasFile('image')) {
+                $data['image'] = $request->file('image')->store('media', 'public');
+            }
+    
+            $saveUser = User::create($data);
+
+            if($saveUser){
+                return true;
+            }
+            return false;
         }
 
     }

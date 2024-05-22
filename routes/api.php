@@ -15,17 +15,19 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth:sanctum')->group(function() {
-
+    Route::controller(App\Http\Controllers\UserController::class)->group(function(){
+        Route::get('/users', 'index');
+        Route::get('/users/{id}', 'show');
+        Route::post('/users/store', 'store');
+        Route::delete('/users/destroy/{user}', 'destroy');
+        Route::post('/users/update/{user}', 'update');
+    
+        //change user status api route
+        Route::post('/users/change-status/{user}', 'updateStatus');
+    });
 });
 
-Route::controller(App\Http\Controllers\UserController::class)->group(function(){
-    Route::get('/users', 'index');
-    Route::get('/users/{id}', 'show');
-    Route::post('/users/store', 'store');
-    Route::delete('/users/destroy/{user}', 'destroy');
-    Route::post('/users/update/{user}', 'update');
 
-    //change user status api route
-    Route::post('/users/change-status/{user}', 'updateStatus');
+Route::controller(App\Http\Controllers\AuthenticationController::class)->group(function(){
+    Route::post('/login', 'login');
 });
-
