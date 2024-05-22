@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -27,3 +28,4 @@ Route::controller(App\Http\Controllers\UserController::class)->group(function(){
     //change user status api route
     Route::post('/users/change-status/{user}', 'updateStatus');
 });
+

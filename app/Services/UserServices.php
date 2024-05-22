@@ -23,6 +23,10 @@
             return false;
         }
 
+        public function uploadImage($file) {
+            
+        }
+
     }
 
 ?>
