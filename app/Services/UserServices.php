@@ -10,14 +10,17 @@
         public function changeStatus(string $id) {
             $user = User::where('id', $id)->first();
 
-            if($user->status === 'Active'){
-                $user->status = 'Blocked';
-            }else{
-                $user->status = 'Active';
+            if($user){
+                if($user->status === 'Active'){
+                    $user->status = 'Blocked';
+                }else{
+                    $user->status = 'Active';
+                }
+                $user->save();
+    
+                return true;
             }
-            $user->save();
-
-            return true;
+            return false;
         }
 
     }
