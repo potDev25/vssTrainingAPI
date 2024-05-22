@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Requests\UserRequest;
 use App\Models\User;
+use App\Services\UserServices;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -43,20 +44,23 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(User $user, Request $request)
+    public function update(User $user, UpdateUserRequest $request)
     {   
-        $data = $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email,'.$user->id
-        ]);
-        
         if(!$user) {
             return response(['message' => 'No User Found!'], 500);
         } else {
-            $user->update($data);
+            $user->update($request->validated());
         }
 
         return response(200);
+    }
+
+    //update user status
+    public function updateStatus(User $user, UserServices $service){
+        if($service->changeStatus($user->id)){
+            return response(200);
+        }
+        return response(500);
     }
 
 
@@ -65,7 +69,6 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-
         if (!$user) {
             return response(['message' => 'No User Found!'], 500);
         } else {

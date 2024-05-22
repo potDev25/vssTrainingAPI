@@ -1,8 +1,5 @@
 <?php
 
-use App\Http\Controllers\ParentsController;
-use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 
@@ -21,11 +18,14 @@ Route::middleware('auth:sanctum')->group(function() {
 
 });
 
-Route::controller(UserController::class)->group(function(){
+Route::controller(App\Http\Controllers\UserController::class)->group(function(){
     Route::get('/users', 'index');
     Route::get('/users/{id}', 'show');
     Route::post('/users/store', 'store');
     Route::delete('/users/destroy/{user}', 'destroy');
     Route::post('/users/update/{user}', 'update');
+
+    //change user status api route
+    Route::post('/users/change-status/{user}', 'updateStatus');
 });
 
