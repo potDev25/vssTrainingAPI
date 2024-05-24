@@ -26,6 +26,12 @@ Route::middleware('auth:sanctum')->group(function() {
         Route::post('/users/change-status/{user}', 'updateStatus');
         Route::post('/users/logout', 'logout');
     });
+
+    Route::controller(App\Http\Controllers\ModeQuestionController::class)->group(function(){
+        //fetch sites
+        Route::post('/questions/store', 'store');
+        Route::get('/questions/sites', 'sites');
+    });
 });
 
 
