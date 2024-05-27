@@ -77,7 +77,7 @@ class ModeQuestionServices {
 
         $data = [];
 
-        /** Get current data for created_at and updated_at */
+        /** Get current date for created_at and updated_at */
 
         $timestamp = Carbon::now();
         foreach ($questions as $key => $question) {
